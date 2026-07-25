@@ -46,7 +46,14 @@ export function JobCard({
                     )}
                 </div>
                 {posting.employment_type_label && (
-                    <Badge color="zinc" variant="soft" size="sm">
+                    // shrink-0/nowrap: as a flex sibling of a long title the
+                    // badge otherwise gets squeezed and wraps mid-label.
+                    <Badge
+                        color="zinc"
+                        variant="soft"
+                        size="sm"
+                        className="!shrink-0 !whitespace-nowrap"
+                    >
                         {posting.employment_type_label}
                     </Badge>
                 )}
