@@ -13,6 +13,12 @@ export interface EmployerJobListProps {
     /** Publishing is gated by the host; false renders the reason instead. */
     canPublish?: boolean;
     publishBlockedReason?: string;
+    /**
+     * Label for the publish action, per posting. Hosts that charge per listing
+     * or meter it against a plan use this to say so up front — "Publish — $49"
+     * beats a bare "Publish" that silently opens a checkout.
+     */
+    publishLabel?: (posting: JobPosting) => string;
     /** Slug of the posting currently mid-action, to show a spinner on its row. */
     busyId?: number | null;
     className?: string;
@@ -32,6 +38,7 @@ export function EmployerJobList({
     onCreate,
     canPublish = true,
     publishBlockedReason,
+    publishLabel,
     busyId = null,
     className,
 }: EmployerJobListProps) {
@@ -150,7 +157,7 @@ export function EmployerJobList({
                                         onClick={() => onPublish(posting)}
                                         className="!text-secondary-700 hover:!text-brand"
                                     >
-                                        Publish
+                                        {publishLabel?.(posting) ?? 'Publish'}
                                     </Button>
                                 ) : (
                                     <Text size="xs" color="muted">
