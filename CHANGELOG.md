@@ -10,6 +10,10 @@ upgrading.
 
 ## [Unreleased]
 
+## 0.1.0 — 2026-08-01
+
+**First published release.** Public board, employer posting management and candidate applications — the React surface for `particle-academy/laravel-jobs`. Controlled components, no router and no HTTP client of its own.
+
 ### Added
 
 - **CI** — matching the rest of the Fancy kit.
