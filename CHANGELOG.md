@@ -10,6 +10,29 @@ upgrading.
 
 ## [Unreleased]
 
+## 0.2.1 — 2026-08-18
+
+### Fixed
+
+- **Dark mode: cards rendered white with invisible text.** Every surface in the
+  package forced `!bg-white` onto a react-fancy `<Card>`, which already renders
+  `bg-white dark:bg-zinc-900` itself. In light mode the override was a no-op; in
+  dark mode it pinned the card white while the text — correctly using the kit's
+  `secondary-*` scale, which flips under `.dark` — turned near-white with it. The
+  result was white-on-white on twelve surfaces across `JobBoard`, `JobCard`,
+  `JobDetail`, `ApplyForm`, `ApplicationList`, `EmployerJobList` and
+  `JobPostingForm`.
+
+  **Nothing to do on upgrade** — the overrides are simply gone and `Card` styles
+  itself. Light mode is byte-identical, because `Card`'s own background *is*
+  white. If you were relying on the forced white in dark mode, pass your own
+  `className`.
+
+  A `dark-mode` test now scans source for colour literals that have no dark
+  counterpart, so this cannot come back silently. It deliberately permits
+  `text-white` on an element that paints its own non-neutral background
+  (`!bg-brand`), since that pairing is correct in both themes.
+
 ## 0.2.0 — 2026-08-07
 
 ### Changed

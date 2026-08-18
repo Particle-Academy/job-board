@@ -37,7 +37,7 @@ export function ApplyForm({
         <Card
             variant="outlined"
             padding="lg"
-            className={`!rounded-xl !border-secondary-200 !bg-white !shadow-sm ${className ?? ''}`}
+            className={`!rounded-xl !border-secondary-200 !shadow-sm ${className ?? ''}`}
         >
             <Heading as="h2" size="lg" weight="bold" className="!text-secondary-900">
                 Apply for {posting.title}

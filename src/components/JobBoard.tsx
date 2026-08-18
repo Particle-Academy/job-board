@@ -45,7 +45,7 @@ export function JobBoard({
                 <Card
                     variant="outlined"
                     padding="lg"
-                    className="!rounded-xl !border-secondary-200 !bg-white !shadow-sm"
+                    className="!rounded-xl !border-secondary-200 !shadow-sm"
                 >
                     <div className="grid gap-4 md:grid-cols-4 md:items-end">
                         <div className="md:col-span-2">
@@ -97,7 +97,7 @@ export function JobBoard({
                 <Card
                     variant="outlined"
                     padding="lg"
-                    className="!rounded-xl !border-secondary-200 !bg-white text-center"
+                    className="!rounded-xl !border-secondary-200 text-center"
                 >
                     <Heading as="h3" size="lg" weight="bold" className="!text-secondary-900">
                         Nothing here yet

@@ -47,7 +47,7 @@ export function EmployerJobList({
             <Card
                 variant="outlined"
                 padding="lg"
-                className={`!rounded-xl !border-secondary-200 !bg-white text-center ${className ?? ''}`}
+                className={`!rounded-xl !border-secondary-200 text-center ${className ?? ''}`}
             >
                 <Heading as="h3" size="lg" weight="bold" className="!text-secondary-900">
                     No postings yet
@@ -82,7 +82,7 @@ export function EmployerJobList({
                         key={posting.id}
                         variant="outlined"
                         padding="lg"
-                        className="!rounded-xl !border-secondary-200 !bg-white !shadow-sm"
+                        className="!rounded-xl !border-secondary-200 !shadow-sm"
                     >
                         <div className="flex flex-wrap items-start justify-between gap-4">
                             <div className="min-w-0">

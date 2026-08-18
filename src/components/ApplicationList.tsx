@@ -36,7 +36,7 @@ export function ApplicationList({
             <Card
                 variant="outlined"
                 padding="lg"
-                className={`!rounded-xl !border-secondary-200 !bg-white text-center ${className ?? ''}`}
+                className={`!rounded-xl !border-secondary-200 text-center ${className ?? ''}`}
             >
                 <Text color="muted">{emptyMessage}</Text>
             </Card>
@@ -54,7 +54,7 @@ export function ApplicationList({
                         key={application.id}
                         variant="outlined"
                         padding="lg"
-                        className="!rounded-xl !border-secondary-200 !bg-white !shadow-sm"
+                        className="!rounded-xl !border-secondary-200 !shadow-sm"
                     >
                         <div className="flex flex-wrap items-start justify-between gap-4">
                             <div className="min-w-0">

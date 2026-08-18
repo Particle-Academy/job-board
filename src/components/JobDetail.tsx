@@ -35,7 +35,7 @@ export function JobDetail({
             <Card
                 variant="outlined"
                 padding="lg"
-                className="!rounded-xl !border-secondary-200 !bg-white !shadow-sm"
+                className="!rounded-xl !border-secondary-200 !shadow-sm"
             >
                 <div className="flex flex-wrap items-center gap-2">
                     {posting.employment_type_label && (
@@ -120,7 +120,7 @@ export function JobDetail({
                 <Card
                     variant="outlined"
                     padding="lg"
-                    className="!rounded-xl !border-secondary-200 !bg-white !shadow-sm"
+                    className="!rounded-xl !border-secondary-200 !shadow-sm"
                 >
                     <Heading as="h2" size="lg" weight="bold" className="!text-secondary-900">
                         About this role
@@ -135,7 +135,7 @@ export function JobDetail({
                 <Card
                     variant="outlined"
                     padding="lg"
-                    className="!rounded-xl !border-secondary-200 !bg-white !shadow-sm"
+                    className="!rounded-xl !border-secondary-200 !shadow-sm"
                 >
                     <Heading as="h2" size="lg" weight="bold" className="!text-secondary-900">
                         Requirements

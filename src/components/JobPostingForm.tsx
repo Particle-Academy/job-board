@@ -87,7 +87,7 @@ export function JobPostingForm({
         <Card
             variant="outlined"
             padding="lg"
-            className={`!rounded-xl !border-secondary-200 !bg-white !shadow-sm ${className ?? ''}`}
+            className={`!rounded-xl !border-secondary-200 !shadow-sm ${className ?? ''}`}
         >
             <Heading as="h2" size="lg" weight="bold" className="!text-secondary-900">
                 {posting ? 'Edit posting' : 'New posting'}

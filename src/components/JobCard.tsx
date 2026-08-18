@@ -32,7 +32,7 @@ export function JobCard({
         <Card
             variant="outlined"
             padding="lg"
-            className={`!rounded-xl !border-secondary-200 !bg-white !shadow-sm hover:!shadow-md transition flex flex-col ${className ?? ''}`}
+            className={`!rounded-xl !border-secondary-200 !shadow-sm hover:!shadow-md transition flex flex-col ${className ?? ''}`}
         >
             <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
