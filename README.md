@@ -1,5 +1,7 @@
 # @particle-academy/job-board
 
+[![Fancified](art/fancified.svg)](https://particle.academy)
+
 Job board UX for the [Fancy UI](https://github.com/Particle-Academy) kit — public
 listings, employer posting management, and candidate applications.
 
