@@ -84,6 +84,18 @@ constructor or call `setEmployer()`.
 `formatPay` returns `null` rather than an empty string when a posting has no pay
 information, so callers can omit the line entirely instead of printing a blank.
 
+## A working consumer you can read
+
+[`laravel-jobs-reference`](https://github.com/Particle-Academy/laravel-jobs-reference) is a real Laravel app that installs this package from
+npm the way you would. Its `tests/js/jobs-client-routes.test.ts` boots the backend on
+a real port and drives the published `JobsClient` at it — which is the route-agreement
+check: a URL this client builds that the backend does not serve is a 404 there and
+nowhere else.
+
+The trick worth copying is that it needs no authentication to do it. **A 401 proves
+the route exists**; only a 404 means the client drifted. So it asserts "not 404" per
+method rather than inventing a way to log in.
+
 ## Tailwind note
 
 These components ship compiled JS. Tailwind v4 only generates classes it can
