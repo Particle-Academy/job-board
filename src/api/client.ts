@@ -14,6 +14,19 @@ export interface JobsClientOptions {
     /** Employer the caller acts for. Required for the employer-side calls. */
     employerId?: number | string;
     bearerToken?: string;
+    /**
+     * The host's OWN axios instance. Given one, this client uses it as-is and
+     * configures nothing — `baseUrl` and `bearerToken` are then yours to set on
+     * it, because it is your instance.
+     *
+     * This exists because axios is a PEER dependency so that the host owns the
+     * HTTP interceptors, and without this option that was not actually true:
+     * `axios.create()` does **not** inherit interceptors registered on the
+     * default export, so a host's auth refresh, retries, tracing or error
+     * normalisation were all silently skipped for every call made here. The peer
+     * gave them the copy and not the behaviour.
+     */
+    http?: AxiosInstance;
 }
 
 type ResourceEnvelope<T> = { data: T };
@@ -30,16 +43,21 @@ export class JobsClient {
     private employerId: number | string | undefined;
 
     constructor(options: JobsClientOptions = {}) {
-        this.http = axios.create({
-            baseURL: options.baseUrl ?? '/api/jobs',
-            withCredentials: true,
-            xsrfCookieName: 'XSRF-TOKEN',
-            xsrfHeaderName: 'X-XSRF-TOKEN',
-            headers: {
-                Accept: 'application/json',
-                ...(options.bearerToken ? { Authorization: `Bearer ${options.bearerToken}` } : {}),
-            },
-        });
+        // A host-supplied instance is used UNTOUCHED. Rewriting its `baseURL` or
+        // headers would take back exactly the ownership the option exists to hand
+        // over, and a silently-overridden config is worse than no option at all.
+        this.http =
+            options.http ??
+            axios.create({
+                baseURL: options.baseUrl ?? '/api/jobs',
+                withCredentials: true,
+                xsrfCookieName: 'XSRF-TOKEN',
+                xsrfHeaderName: 'X-XSRF-TOKEN',
+                headers: {
+                    Accept: 'application/json',
+                    ...(options.bearerToken ? { Authorization: `Bearer ${options.bearerToken}` } : {}),
+                },
+            });
         this.employerId = options.employerId;
     }
 

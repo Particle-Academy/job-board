@@ -10,6 +10,53 @@ upgrading.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-02
+
+### Fixed
+
+- **`JobsClient` now accepts the host's own axios instance, which is what the peer
+  dependency was always supposed to buy.**
+
+  ```ts
+  new JobsClient({ http: myConfiguredAxios })
+  ```
+
+  axios is a **peer** dependency here, and this package's own notes give the
+  reason: *"so the host owns the React copy and the HTTP interceptors."* The second
+  half was not true. `JobsClient` called `axios.create()` in its constructor, and
+  **an `axios.create()` instance does not inherit interceptors registered on the
+  default export** — measured, not assumed:
+
+  ```
+  axios.interceptors.request.use(fn)
+  axios.create().interceptors.request.handlers.length   // 0
+  ```
+
+  So a host that registered auth refresh, retries, tracing or error normalisation
+  on `axios` had every one of them silently skipped for calls this client made.
+  The peer handed over the copy and not the behaviour — and silently, which is the
+  part that matters: nothing failed, requests just quietly bypassed the host's
+  pipeline.
+
+  A supplied instance is used **untouched**. `baseUrl` and `bearerToken` are then
+  yours to set on it, because it is your instance — rewriting its config would take
+  back the ownership the option exists to give. There is a test asserting `baseUrl`
+  is *not* applied over a host instance.
+
+  It also makes the client **testable without a live server**, by passing an
+  instance with a stub adapter. That is how the new tests run, and it is why this
+  surfaced: a reference consumer has to exercise the HTTP surface, and mocking a
+  module is not the same as proving the client talks to the routes.
+
+  **What you must do: nothing.** Purely additive — omit `http` and the client
+  builds the same instance as before (`/api/jobs`, cookie auth, Laravel's XSRF
+  header names), which has its own test.
+
+  One of the new tests pins the axios behaviour this exists because of, so if a
+  future axios ever made `create()` inherit interceptors, that is noticed there
+  rather than someone concluding the option was never needed.
+
+
 ## [0.4.0] - 2026-10-02
 
 ### Added
