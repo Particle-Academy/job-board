@@ -10,6 +10,55 @@ upgrading.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-02
+
+### Added
+
+- **`ApplyForm` takes a slot**, so a host can add its own fields without forking
+  the component.
+
+  `ApplyFormProps` was a closed set — `posting`, `onSubmit`, `onCancel`,
+  `submitting`, `errors`, `defaults`, `className` — with no children and no file
+  field. The first consumer's resume story was blocked on exactly that: there was
+  no way to put a resume input on this form at all.
+
+  ```tsx
+  <ApplyForm posting={posting} onSubmit={send}>
+      <Input type="file" label="Resume" onChange={...} />
+  </ApplyForm>
+  ```
+
+  **A generic slot rather than a `resume` prop, at the consumer's own suggestion
+  and they were right.** `resume_path` is one host's requirement; a slot serves
+  every host-specific field without another round trip through us. The backend
+  already has a `resume_path` column and API validation with nothing writing to
+  it, so a resume-shaped prop would have looked like the answer while still not
+  being general.
+
+  **Where it renders is part of the contract**, not styling: INSIDE the `<form>`,
+  so host fields take part in submission, native validation and the disabled
+  state instead of behaving like a second form; and ABOVE the actions, because a
+  field below Submit reads as a footnote and gets missed. It carries a
+  `data-job-board-apply-extra` handle, and the wrapper is omitted entirely when
+  there are no children so an empty slot is not a stray grid row.
+
+  **The host owns the field's state.** `onSubmit` still receives
+  `JobApplicationInput` and nothing else — that is the package's contract and it
+  does not move. Merge your own value in your own handler.
+
+  **What you must do: nothing.** Purely additive; a caller passing no children
+  renders exactly as before, which has its own test.
+
+### Fixed
+
+- **`AGENTS.md` said "No suite yet"** while two test files and a `test` script
+  existed. True when written, never re-checked. A stale "there is nothing here"
+  is worse than silence — the next agent either rebuilds the setup or concludes
+  tests are not expected. It now says what exists, including that a DOM test needs
+  `// @vitest-environment jsdom` because there is no `vitest.config.*` and the
+  default environment is `node`.
+
+
 ## 0.2.1 — 2026-08-18
 
 ### Fixed

@@ -1,6 +1,6 @@
 {
     "name": "@particle-academy/job-board",
-    "version": "0.2.1",
+    "version": "0.3.0",
     "description": "Job board UX — public listings, employer posting management, and candidate applications, built on Fancy UI primitives.",
     "keywords": [
         "jobs",

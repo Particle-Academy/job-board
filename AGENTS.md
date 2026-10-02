@@ -45,8 +45,19 @@ by us. Treat the first integration as a bug-finding exercise, not a formality.
 
 ## Testing
 
-No suite yet. First thing worth covering: `format.ts` across every enum case,
-since a missing case degrades silently to a blank label.
+`npm test` → vitest. Three files today: `format.test.ts` (every enum case, since
+a missing one degrades silently to a blank label), `dark-mode.test.ts` (which
+colour utilities may be reached for), and `apply-form-slot.test.tsx`.
+
+**DOM tests need `// @vitest-environment jsdom` at the top of the file.** There is
+no `vitest.config.*` here, so the default environment is `node` and a render test
+without that pragma fails on `document` rather than on its assertion.
+
+> This section read **"No suite yet"** until 2026-10-02, by which point there were
+> two test files and a `test` script. It was true when written and nothing
+> re-checked it — and a stale "there is nothing here" is worse than silence,
+> because the next agent reads it and either duplicates the setup or concludes
+> tests are not expected. State what exists, not what did.
 
 ## Publishing
 
