@@ -58,7 +58,7 @@
         "@particle-academy/react-fancy": "^4.16.0",
         "@types/react": "^19.2.18",
         "@types/react-dom": "^19.2.4",
-        "axios": "^1.11.0",
+        "axios": "^1.20.0",
         "jsdom": "^29.1.1",
         "react": "^19.2.8",
         "react-dom": "^19.2.8",
@@ -73,6 +73,8 @@
         "node": ">=22"
     },
     "overrides": {
-        "esbuild": "^0.28.1"
+        "esbuild": "^0.28.1",
+      "brace-expansion": "^5.0.12",
+      "undici": "^8.11.2"
     }
 }
