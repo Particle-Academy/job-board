@@ -12,6 +12,24 @@ upgrading.
 
 ### Fixed
 
+- **CI had been red since the `ApplyForm` slot commit, and three releases went out
+  over it.** The `undici` override was `^8.11.2`; jsdom 29 requires `^7.25.0`, so
+  the DOM test added in that commit could not load jsdom at all
+  (`MODULE_NOT_FOUND` from `jsdom-dispatcher.js`). Corrected to `^7.29.1`, which is
+  the patched release on the 7 line — undici patches per major, so the advisory is
+  still addressed.
+
+  Dev-only: `undici` is not in `dependencies` and no published tarball was ever
+  affected. Nothing for a consumer to do.
+
+  Two things made it survive three releases. **This repo tracks no lockfile**, so
+  CI resolves from scratch and a locally-installed tree that still had the old
+  undici passed every time I ran the suite by hand. And nobody read the CI tick:
+  0.3.0, 0.4.0 and 0.5.0 were all tagged with `ci.yml` failing on `main`. Verified
+  the fix the only way that counts — a fresh resolve from `package.json` alone,
+  with npm 11.18.0, exactly as CI does.
+
+
 - **`CHANGELOG.md` is now in the published tarball.** `files` did not whitelist it, so npm never shipped it — and this package puts breaking changes in MINOR releases and tells you in the README to read the entry before taking one. The instruction existed for the author, who has the file, and not for the consumer, who is the only one being instructed. Nothing for you to do; the file simply arrives from this release on.
 
 ## [0.5.0] - 2026-10-02
