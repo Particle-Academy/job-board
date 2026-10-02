@@ -1,4 +1,5 @@
 import { Badge, Button, Card, Heading, Select, Text } from '@particle-academy/react-fancy';
+import type { ReactNode } from 'react';
 import { APPLICATION_STATUS_OPTIONS, applicationStatusColor, formatPosted } from '../format';
 import type { ApplicationStatus, JobApplication } from '../types';
 
@@ -13,6 +14,22 @@ export interface ApplicationListProps {
     /** Show candidate identity. Off on the candidate's own list. */
     showCandidate?: boolean;
     busyId?: number | null;
+    /**
+     * The host's OWN control for a row, rendered beside the built-in actions.
+     *
+     * A FUNCTION rather than children, because a list needs the row to decide
+     * what to render — a resume download link needs the id of the application it
+     * is on, and children could only ever render the same thing on every row.
+     *
+     * Generic rather than a `resume` prop, for the reason `ApplyForm`'s slot is:
+     * this component cannot know how a host serves a file, and the next
+     * host-specific control should not need another release. Return `null` for a
+     * row that has nothing — no wrapper is rendered for it.
+     *
+     * The first consumer could not show a resume link on EITHER side, employer or
+     * candidate, because the prop set was closed. That is the gap.
+     */
+    rowActions?: (application: JobApplication) => ReactNode;
     emptyMessage?: string;
     className?: string;
 }
@@ -28,6 +45,7 @@ export function ApplicationList({
     showPosting = true,
     showCandidate = true,
     busyId = null,
+    rowActions,
     emptyMessage = 'No applications yet.',
     className,
 }: ApplicationListProps) {
@@ -99,6 +117,31 @@ export function ApplicationList({
                             </div>
 
                             <div className="flex items-center gap-2">
+                                {/*
+                                    The host's control, FIRST in the action row.
+                                    A resume download is a read, and reads belong
+                                    left of the controls that change something —
+                                    putting it after a status Select would make the
+                                    destructive-ish action the easier target.
+                                    Called per row with that row's application, and
+                                    rendered only when it returns something, so a
+                                    host showing a link on some rows and not others
+                                    gets no empty box on the rest.
+                                */}
+                                {rowActions
+                                    ? (() => {
+                                          const actions = rowActions(application);
+                                          return actions ? (
+                                              <div
+                                                  data-job-board-application-actions=""
+                                                  className="flex items-center gap-2"
+                                              >
+                                                  {actions}
+                                              </div>
+                                          ) : null;
+                                      })()
+                                    : null}
+
                                 {onStatusChange && (
                                     <Select
                                         list={[...APPLICATION_STATUS_OPTIONS]}

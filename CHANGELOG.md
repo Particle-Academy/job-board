@@ -10,6 +10,47 @@ upgrading.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-02
+
+### Added
+
+- **`ApplicationList` takes a per-row slot**, so a host can put its own control on
+  each row.
+
+  ```tsx
+  <ApplicationList
+      applications={applications}
+      rowActions={(application) => <ResumeLink application={application} />}
+  />
+  ```
+
+  `ApplicationListProps` was a closed set, and this component is used from **both
+  sides** — the employer reviewing applicants and the candidate looking at their
+  own. So neither could show a resume download link: the route and its
+  authorisation existed and were tested, and the link had nowhere to go. The first
+  consumer's only options were to fork the list or render a second parallel list of
+  links beside it.
+
+  **A function, not children**, because a list needs the row to decide what to
+  render — a download link needs the id of the application it is on, and children
+  could only ever render the same thing on every row. There is a test asserting the
+  callback receives each row's own application, because getting the last row's for
+  every row would look plausible and link everything to one application.
+
+  **Generic rather than a `resume` prop**, for the same reason as `ApplyForm`'s
+  slot in 0.3.0: this component cannot know how a host serves a file, and the next
+  host-specific control should not need another release.
+
+  Rendered **first** in the action row — a download is a read, and reads belong
+  left of the controls that change something. Return `null` for a row with nothing
+  and no wrapper is rendered, so a host showing a link on only some rows gets no
+  empty box on the rest. Carries a `data-job-board-application-actions` handle.
+
+  **What you must do: nothing.** Purely additive; omitting `rowActions` renders
+  exactly as before, which has its own test, as does the empty-list case never
+  calling the callback at all.
+
+
 ## [0.3.0] - 2026-10-02
 
 ### Added
