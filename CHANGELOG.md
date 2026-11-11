@@ -10,6 +10,13 @@ upgrading.
 
 ## [Unreleased]
 
+### Changed
+
+- **Releases need a lab-run certificate.** `publish.yml` gains a read-only
+  `lab-certificate` job that every publishing job needs: a tag is published only
+  when the fancy-labs lab has certified that exact version and commit. Consumers
+  do nothing; this changes how releases are cut, not what the package does.
+
 ### Fixed
 
 - **CI had been red since the `ApplyForm` slot commit, and three releases went out
@@ -28,7 +35,6 @@ upgrading.
   0.3.0, 0.4.0 and 0.5.0 were all tagged with `ci.yml` failing on `main`. Verified
   the fix the only way that counts — a fresh resolve from `package.json` alone,
   with npm 11.18.0, exactly as CI does.
-
 
 - **`CHANGELOG.md` is now in the published tarball.** `files` did not whitelist it, so npm never shipped it — and this package puts breaking changes in MINOR releases and tells you in the README to read the entry before taking one. The instruction existed for the author, who has the file, and not for the consumer, who is the only one being instructed. Nothing for you to do; the file simply arrives from this release on.
 
@@ -90,7 +96,6 @@ upgrading.
   future axios ever made `create()` inherit interceptors, that is noticed there
   rather than someone concluding the option was never needed.
 
-
 ## [0.4.0] - 2026-10-02
 
 ### Added
@@ -130,7 +135,6 @@ upgrading.
   **What you must do: nothing.** Purely additive; omitting `rowActions` renders
   exactly as before, which has its own test, as does the empty-list case never
   calling the callback at all.
-
 
 ## [0.3.0] - 2026-10-02
 
@@ -180,7 +184,6 @@ upgrading.
   `// @vitest-environment jsdom` because there is no `vitest.config.*` and the
   default environment is `node`.
 
-
 ## 0.2.1 — 2026-08-18
 
 ### Fixed
@@ -221,7 +224,6 @@ upgrading.
 ### Why
 
 These are the kit 0.5 platform floors, applied across every package at once so a consumer never has to resolve a mix. **No API changed, nothing was removed, nothing was renamed** — only what the package requires.
-
 
 ## 0.1.0 — 2026-08-01
 
