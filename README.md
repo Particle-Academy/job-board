@@ -2,10 +2,10 @@
 
 [![Fancified](art/fancified.svg)](https://particle.academy)
 
-Job board UX for the [Fancy UI](https://github.com/Particle-Academy) kit — public
+Job board UX for the [Fancy Dev Kit](https://github.com/Particle-Academy) — public
 listings, employer posting management, and candidate applications.
 
-Built **strictly on Fancy UI primitives** (`@particle-academy/react-fancy`):
+Built **strictly on Fancy Dev Kit primitives** (`@particle-academy/react-fancy`):
 `Card`, `Button`, `Badge`, `Heading`, `Text`, `Input`, `Select`, `Textarea`,
 `Switch`, `Callout`. Raw HTML is limited to layout scaffolding.
 
