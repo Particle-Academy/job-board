@@ -12,13 +12,20 @@ Built **strictly on Fancy Dev Kit primitives** (`@particle-academy/react-fancy`)
 The server half is
 [`particle-academy/laravel-jobs`](https://github.com/Particle-Academy/laravel-jobs).
 
+<!-- fancy-agents-note:start -->
+> **For agents.** Every Fancy package, this one included, is listed on the
+> Fancy MCP catalog server at `https://ui.particle.academy/mcp` (streamable HTTP, no API key;
+> MCP id `fancy-ui`), with install commands and docs. How an agent installs
+> and uses this package is in [AGENTS.md](https://github.com/Particle-Academy/job-board/blob/main/AGENTS.md).
+<!-- fancy-agents-note:end -->
+
 ## Install
 
 ```sh
 npm install @particle-academy/job-board
 ```
 
-Peers: `@particle-academy/react-fancy` >=4, `react` 18/19, `axios` >=1.
+Peers: `@particle-academy/react-fancy` >=4, `react` 19, `axios` >=1.
 
 ## Components
 

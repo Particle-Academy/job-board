@@ -1,66 +1,68 @@
-# AGENTS.md — @particle-academy/job-board
+# Using @particle-academy/job-board — guide for agents
 
-The React surface for `particle-academy/laravel-jobs`: a public board, employer
-posting management, and candidate applications. `CLAUDE.md` symlinks here.
+How an agent installs and uses this package in a consumer app. What the package
+is, is in [README.md](./README.md). Notes for working ON this repo's code are in
+[CONTRIBUTING.md](./CONTRIBUTING.md).
 
-## The surface
+## Install
 
-| Component | Renders |
-|---|---|
-| `JobBoard` | the public list, with filters |
-| `JobCard` | one posting in a list |
-| `JobDetail` | a single posting |
-| `ApplyForm` | a candidate application |
-| `JobPostingForm` | create / edit a posting (employer side) |
-| `EmployerJobList` | an employer's own postings + their status |
-| `ApplicationList` | applications against a posting |
+```bash
+npm install @particle-academy/job-board
+```
 
-`JobsClient` wraps the REST surface. `format.ts` carries the display helpers for
-the three enums (`JobPostingStatus`, `EmploymentType`, `ApplicationStatus`) —
-use those rather than re-deriving labels per screen.
+- **Peers:** `@particle-academy/react-fancy` `>=4`, `react ^19`, `react-dom ^19`,
+  `axios >=1`. They are peers so the host owns the React copy and the HTTP
+  interceptors.
+- **Node:** `>=22`.
+- **The server half** is the Composer package `particle-academy/laravel-jobs`.
+- **Tailwind v4 must see the compiled JS**, or the styling silently goes missing:
 
-## Rules
+  ```css
+  @source "../../node_modules/@particle-academy/job-board/dist";
+  ```
 
-- **Controlled, per the Fancy component contract.** `value` + `onChange`, stable
-  `data-*` handles, JSON-friendly props. No internal-only state an agent might
-  need to read or write.
-- **The UI must not be the authorization.** `laravel-jobs` gates on
-  `AuthorizesEmployers` and `GatesPublishing`, both deny-by-default server-side.
-  Hiding a button is presentation; it is never the control. Assume every action
-  a component can render will also be attempted directly against the API.
-- **Publish denials carry a `code` and `meta`** — `PublishDecision` is designed
-  so the UI can respond meaningfully (send to checkout, show a quota) instead of
-  printing a generic failure. Surface them.
-- **Anonymous applications are supported by the backend.** Don't require an
-  authenticated user in `ApplyForm` unless the host has said so.
-- **Peer, not dependency, on `react-fancy`** and `axios`, so the host owns the
-  React copy and the HTTP interceptors.
+## Find it on the Fancy MCP server
 
-## Status
+The catalog server is `https://ui.particle.academy/mcp` (streamable HTTP, no API
+key; MCP id `fancy-ui`). This package's registry entries (`package` =
+`job-board`):
 
-Published 0.1.0, but **not yet consumed by the showcase** — the decision was
-that the jobs pair joins the kit as packages while no job board is built into
-the sandbox yet. So this surface has never been exercised against a real backend
-by us. Treat the first integration as a bug-finding exercise, not a formality.
+- `job-board`, `job-detail`, `apply-form`, `job-posting-form`,
+  `employer-job-list`, `application-list`
 
-## Testing
+Use `search-components` ("job board", "job application") to find them,
+`install-instructions` for the exact commands, and `get-component` for the
+source bundle. Vendored source: `npx fancy-cli@latest add <slug>`. The backend
+half is found with `search-backend-packages`.
 
-`npm test` → vitest. Three files today: `format.test.ts` (every enum case, since
-a missing one degrades silently to a blank label), `dark-mode.test.ts` (which
-colour utilities may be reached for), and `apply-form-slot.test.tsx`.
+## API essentials
 
-**DOM tests need `// @vitest-environment jsdom` at the top of the file.** There is
-no `vitest.config.*` here, so the default environment is `node` and a render test
-without that pragma fails on `document` rather than on its assertion.
+- **Components:** `JobBoard`, `JobCard`, `JobDetail`, `ApplyForm`,
+  `JobPostingForm` (never sets status), `EmployerJobList`, `ApplicationList`.
+  All are controlled and presentational: they hold no server state, raise
+  callbacks rather than fetching, and take JSON-friendly props.
+- **`JobsClient`** wraps the `laravel-jobs` API. It defaults to cookie auth with
+  Laravel's XSRF header names, so it works unchanged in a session-authenticated
+  Inertia app. Employer-side calls throw if no employer is set: pass
+  `employerId` to the constructor or call `setEmployer()`.
+- **Formatting helpers:** `formatPay`, `formatLocation`, `formatPosted`,
+  `postingStatusColor`, `applicationStatusColor`, and the option lists
+  `EMPLOYMENT_TYPE_OPTIONS`, `PAY_UNIT_OPTIONS`, `APPLICATION_STATUS_OPTIONS`.
+  Use these rather than re-deriving enum labels per screen.
 
-> This section read **"No suite yet"** until 2026-10-02, by which point there were
-> two test files and a `test` script. It was true when written and nothing
-> re-checked it — and a stale "there is nothing here" is worse than silence,
-> because the next agent reads it and either duplicates the setup or concludes
-> tests are not expected. State what exists, not what did.
+## Traps
 
-## Publishing
-
-Pure OIDC via Trusted Publishing — no tokens. `publish.yml` fires on `v*.*.*`
-with `permissions: id-token: write`. **npm pinned to `11.18.0`**: OIDC needs
-11.5+, the runner ships 10.x, and `npm@latest` (12.x) broke `--provenance`.
+- **The UI is not the authorization.** `laravel-jobs` gates on
+  `AuthorizesEmployers` and `GatesPublishing`, both deny-by-default on the
+  server. Hiding a button is presentation only.
+- **Publish denials carry a `code` and `meta`** (`PublishDecision`). Use them to
+  respond meaningfully (send to checkout, show a quota) instead of printing a
+  generic failure.
+- **Anonymous applications are supported by the backend.** Do not require an
+  authenticated user for `ApplyForm` unless the host wants that.
+- **`formatPay` returns `null`**, not an empty string, when a posting has no pay
+  information. Omit the line rather than printing a blank.
+- **A working consumer to read:**
+  [`laravel-jobs-reference`](https://github.com/Particle-Academy/laravel-jobs-reference)
+  installs this package from npm and drives the published `JobsClient` against
+  a real backend.
