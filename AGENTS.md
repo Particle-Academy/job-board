@@ -58,8 +58,9 @@ half is found with `search-backend-packages`.
 - **Publish denials carry a `code` and `meta`** (`PublishDecision`). Use them to
   respond meaningfully (send to checkout, show a quota) instead of printing a
   generic failure.
-- **Anonymous applications are supported by the backend.** Do not require an
-  authenticated user for `ApplyForm` unless the host wants that.
+- **Applying needs an authenticated candidate.** `laravel-jobs` has no
+  anonymous applications: every application belongs to a user id, and an
+  unauthenticated apply answers 401. Put `ApplyForm` behind sign-in.
 - **`formatPay` returns `null`**, not an empty string, when a posting has no pay
   information. Omit the line rather than printing a blank.
 - **A working consumer to read:**

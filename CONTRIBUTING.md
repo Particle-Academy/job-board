@@ -36,8 +36,10 @@ use those rather than re-deriving labels per screen.
 - **Publish denials carry a `code` and `meta`** — `PublishDecision` is designed
   so the UI can respond meaningfully (send to checkout, show a quota) instead of
   printing a generic failure. Surface them.
-- **Anonymous applications are supported by the backend.** Don't require an
-  authenticated user in `ApplyForm` unless the host has said so.
+- **There are no anonymous applications.** `laravel-jobs` requires a user id
+  for every application (`ApplicationService::submit()`), and its suite asserts
+  an unauthenticated apply answers **401**. This bullet used to say anonymous
+  applications were supported, copied from a backend note that was itself wrong.
 - **Peer, not dependency, on `react-fancy`** and `axios`, so the host owns the
   React copy and the HTTP interceptors.
 
