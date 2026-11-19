@@ -10,6 +10,8 @@ upgrading.
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-11-19
+
 ### Changed
 
 - **CI: the lab-certificate gate verifies against the lab's rotated key list.**
